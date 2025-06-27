@@ -26,7 +26,7 @@ def get_emotional_response(prompt):
     )
     try:
         response = openai.chat.completions.create(
-            model="deepseek-ai/deepseek-llm",
+            model="mistralai/mistral-7b-instruct"
             messages=[
                 {"role": "system", "content": system_msg},
                 {"role": "user", "content": prompt}
