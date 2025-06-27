@@ -4,9 +4,10 @@ import json
 from datetime import datetime
 
 # === OpenRouter Configuration ===
-openai.api_key = st.secrets["OPENROUTER_KEY"]
-openai.api_base = "https://openrouter.ai/api/v1"
-
+client = openai.OpenAI(
+    api_key=st.secrets["OPENROUTER_KEY"],
+    base_url="https://openrouter.ai/api/v1"
+)
 MEMORY_FILE = "memory_db.json"
 
 EMOTION_COLORS = {
@@ -25,13 +26,13 @@ def get_emotional_response(prompt):
         "awe, confusion, peace, loneliness. Format:\n\n[reply]\n\n[emotion]"
     )
     try:
-        response = openai.chat.completions.create(
+        response = client.chat.completions.create(
             model="mistralai/mistral-7b-instruct",
             messages=[
-                {"role": "system", "content": system_msg},
-                {"role": "user", "content": prompt}
+                {"role": "system", "content": "You're a kind emotional AI"},
+                {"role": "user", "content": "I'm feeling excited about this project!"}
             ]
-        )
+       )
         content = response.choices[0].message.content.strip()
         if "\n\n" in content:
             reply, emotion = content.split("\n\n")[:2]
